@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {pink500, grey200, grey500} from 'material-ui/styles/colors';
-import PageBase from '../components/PageBase';
+import AppPage from './AppPage';
 import Data from '../data';
 
 const TablePage = () => {
@@ -42,7 +42,7 @@ const TablePage = () => {
   };
 
   return (
-    <PageBase title="Table Page"
+    <AppPage title="Table Page"
               navigation="Application / Table Page">
 
       <div>
@@ -64,7 +64,7 @@ const TablePage = () => {
           </TableHeader>
           <TableBody>
             {Data.tablePage.items.map(item =>
-              <TableRow key={item.id}>
+              (<TableRow key={item.id}>
                 <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
                 <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
                 <TableRowColumn style={styles.columns.price}>{item.price}</TableRowColumn>
@@ -79,12 +79,12 @@ const TablePage = () => {
                     </FloatingActionButton>
                   </Link>
                 </TableRowColumn>
-              </TableRow>
+              </TableRow>)
             )}
           </TableBody>
         </Table>    
       </div>
-    </PageBase>
+    </AppPage>
   );
 };
 

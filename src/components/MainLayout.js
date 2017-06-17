@@ -1,17 +1,20 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '../components/Header';
-import LeftDrawer from '../components/LeftDrawer';
 import withWidth, {LARGE, SMALL} from 'material-ui/utils/withWidth';
 import ThemeDefault from '../theme-default';
 import Data from '../data';
 
-class App extends React.Component {
+/* MainLayout components */
+import Header from './main/Header';
+import LeftDrawer from './main/LeftDrawer';
+
+class MainLayout extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      navDrawerOpen: false
+      navDrawerOpen: true
     };
   }
 
@@ -46,7 +49,6 @@ class App extends React.Component {
         <div>
           <Header styles={styles.header}
                   handleChangeRequestNavDrawer={this.handleChangeRequestNavDrawer.bind(this)}/>
-
             <LeftDrawer navDrawerOpen={navDrawerOpen}
                         menus={Data.menus}
                         username="User Admin"/>
@@ -60,9 +62,9 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
+MainLayout.propTypes = {
   children: PropTypes.element,
   width: PropTypes.number
 };
 
-export default withWidth()(App);
+export default withWidth()(MainLayout);

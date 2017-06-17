@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -43,7 +44,7 @@ const RecentlyProducts = (props) => {
       <List>
         <Subheader style={styles.subheader}>Recent Products</Subheader>
         {props.data.map(item =>
-          <div key={item.title}>
+          (<div key={item.title}>
             <ListItem
               leftAvatar={<Avatar icon={<Wallpaper />} />}
               primaryText={item.title}
@@ -51,7 +52,7 @@ const RecentlyProducts = (props) => {
               rightIconButton={rightIconMenu}
             />
             <Divider inset={true} />
-          </div>
+          </div>)
         )}
       </List>
     </Paper>

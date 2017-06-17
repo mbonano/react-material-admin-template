@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -8,9 +8,9 @@ import Toggle from 'material-ui/Toggle';
 import DatePicker from 'material-ui/DatePicker';
 import {grey400} from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
-import PageBase from '../components/PageBase';
+import AppPage from './AppPage';
 
-const FormPage = () => {
+const Form = () => {
 
   const styles = {
     toggleDiv: {
@@ -32,10 +32,10 @@ const FormPage = () => {
   };
 
   return (
-    <PageBase title="Form Page"
+    <AppPage title="Form Page"
               navigation="Application / Form Page">
       <form>
-
+         
         <TextField
           hintText="Name"
           floatingLabelText="Name"
@@ -76,8 +76,8 @@ const FormPage = () => {
                         primary={true}/>
         </div>
       </form>
-    </PageBase>
+    </AppPage>
   );
 };
 
-export default FormPage;
+export default Form;

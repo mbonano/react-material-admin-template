@@ -8,7 +8,7 @@ describe('<InfoBox />', () => {
     const wrapper = shallow(<InfoBox title="Title" value="1500"/>);
     const content = wrapper.find('div > span');
 
-    expect(content).to.have.length.of(2);
+    expect(content).to.have.lengthOf(2);
     expect('Title').to.equal(content.at(0).text());
     expect('1500').to.equal(content.at(1).text());
   });

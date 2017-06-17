@@ -8,10 +8,10 @@ import {grey500, white} from 'material-ui/styles/colors';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import Help from 'material-ui/svg-icons/action/help';
 import TextField from 'material-ui/TextField';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import ThemeDefault from '../theme-default';
 
-const LoginPage = () => {
+const Login = () => {
 
   const styles = {
     loginContainer: {
@@ -141,4 +141,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

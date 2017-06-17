@@ -1,26 +1,6 @@
-React Ui-Material Admin Template
-================================
+# React MobX React-Router 4 Material UI Admin Template
 
-This is a simple responsive admin template using [React](https://facebook.github.io/react/) and [Material-UI](http://www.material-ui.com/) components.
-
-This is the very first version, feel free to use for any app. Contributions are always welcome!
-
-Demo
-----
-
-You can find a demo [here](http://rafaelhz.github.io/react-material-admin-template).
+Just run `npm install` and `npm start`, then go to localhost:3000 to start developing.
+To build, run `npm run build` and then go to localhost:3000 for the minified production bundle.
 
 
-Installation / Running
-----------------------
-
-1. `git clone <repository-url>` this repository
-2. change into the new directory
-3. `npm install`
-4. `npm start` will run the app
-5. Visit the app at [http://localhost:3000](http://localhost:3000)
-
-
-License
--------
-MIT

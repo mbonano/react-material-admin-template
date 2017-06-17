@@ -1,65 +1,112 @@
+import path from 'path';
 import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import WebpackMd5Hash from 'webpack-md5-hash';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-
-const GLOBALS = {
-  'process.env.NODE_ENV': JSON.stringify('production'),
-  __DEV__: false
-};
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default {
-  debug: true,
-  devtool: 'source-map',
-  noInfo: true,
-  entry: './src/index',
-  target: 'web',
-  output: {
-    path: `${__dirname}/dist`,
-    publicPath: './',
-    filename: '[name].[chunkhash].js'
-  },
-  plugins: [
-    new WebpackMd5Hash(),
-
-    new webpack.optimize.OccurenceOrderPlugin(),
-
-    new webpack.DefinePlugin(GLOBALS),
-
-    new ExtractTextPlugin('[name].[contenthash].css'),
-
-    new HtmlWebpackPlugin({
-      template: 'src/index.ejs',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      },
-      inject: true
-    }),
-    new webpack.optimize.DedupePlugin(),
-
-    new webpack.optimize.UglifyJsPlugin()
-  ],
-  module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
-      {test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'url?name=[name].[ext]'},
-      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url?limit=10000&mimetype=application/font-woff&name=[name].[ext]"},
-      {test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream&name=[name].[ext]'},
-      {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml&name=[name].[ext]'},
-      {test: /\.(jpe?g|png|gif)$/i, loader: 'file?name=[name].[ext]'},
-      {test: /\.ico$/, loader: 'file?name=[name].[ext]'},
-      {test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!postcss!sass?sourceMap')}
+    entry: {
+        vendor: ["react", "react-dom", "react-router"],
+        app: ["babel-polyfill", "./src/index"]
+    },
+    output: {
+        path: path.join(__dirname, "dist"),
+        publicPath: "/",
+        filename: "assets/[name].[hash].js",
+        chunkFilename: "assets/[name].[chunkhash].js"
+    },
+    devtool: "cheap-module-source-map",
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                include: path.join(__dirname, "src"),
+                loader: "babel-loader",
+                query: {
+                    presets: [
+                        ["es2015", { modules: false }],
+                        "stage-0",
+                        "react"
+                    ],
+                    plugins: [
+                        "transform-async-to-generator",
+                        "transform-decorators-legacy"
+                    ]
+                }
+            },
+            {
+                test: /\.scss|css$/i,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [
+                        "css-loader",
+                        "postcss-loader",
+                        "resolve-url-loader",
+                        "sass-loader?sourceMap"
+                    ]
+                })
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    "file-loader?hash=sha512&digest=hex&name=[hash].[ext]",
+                    {
+                        loader: "image-webpack-loader",
+                        options: {
+                            progressive: true,
+                            optimizationLevel: 7,
+                            interlaced: false,
+                            pngquant: {
+                                quality: "65-90",
+                                speed: 4
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: "url-loader?limit=10000&mimetype=application/font-woff"
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: "file-loader"
+            },
+            { 
+                test: /\.ico$/, 
+                loaders: [
+                    "file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]",
+                    "image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false"
+                ] 
+            }
+        ]
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(true),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            minChunks: Infinity
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            compress: {
+                warnings: false,
+                drop_console: true,
+                screw_ie8: true
+            },
+            output: {
+                comments: false
+            }
+        }),
+        new ExtractTextPlugin("assets/styles.css"),
+        new HtmlWebpackPlugin({
+            hash: false,
+            template: "./src/index.hbs"
+        })
     ]
-  },
-  postcss: ()=> [autoprefixer]
 };

@@ -1,9 +1,10 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import globalStyles from '../styles';
 
-const PageBase = (props) => {
+const AppPage = (props) => {
 
     const {title, navigation} = props;
 
@@ -24,10 +25,10 @@ const PageBase = (props) => {
     );
 };
 
-PageBase.propTypes = {
+AppPage.propTypes = {
   title: PropTypes.string,
   navigation: PropTypes.string,
   children: PropTypes.element
 };
 
-export default PageBase;
+export default AppPage;

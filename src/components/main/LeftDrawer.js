@@ -1,9 +1,10 @@
-import React,  { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
 import {spacing, typography} from 'material-ui/styles';
 import {white, blue600} from 'material-ui/styles/colors';
 import MenuItem from 'material-ui/MenuItem';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import Avatar from 'material-ui/Avatar';
 
 const LeftDrawer = (props) => {
@@ -27,7 +28,7 @@ const LeftDrawer = (props) => {
     avatar: {
       div: {
         padding: '15px 0 20px 15px',
-        backgroundImage:  'url(' + require('../images/material_bg.png') + ')',
+        backgroundImage:  'url(' + require('../../images/material_bg.png') + ')',
         height: 45
       },
       icon: {
@@ -61,13 +62,13 @@ const LeftDrawer = (props) => {
         </div>
         <div>
           {props.menus.map((menu, index) =>
-            <MenuItem
+            (<MenuItem
               key={index}
               style={styles.menuItem}
               primaryText={menu.text}
               leftIcon={menu.icon}
               containerElement={<Link to={menu.link}/>}
-            />
+            />)
           )}
         </div>
     </Drawer>

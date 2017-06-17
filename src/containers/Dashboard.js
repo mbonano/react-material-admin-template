@@ -12,7 +12,7 @@ import RecentlyProducts from '../components/dashboard/RecentlyProducts';
 import globalStyles from '../styles';
 import Data from '../data';
 
-const DashboardPage = () => {
+const Dashboard = () => {
 
   return (
     <div>
@@ -77,4 +77,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default Dashboard;

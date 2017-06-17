@@ -1,49 +1,88 @@
+import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import autoprefixer from 'autoprefixer';
 
 export default {
-  debug: true,
-  devtool: 'cheap-module-eval-source-map',
-  noInfo: true,
-  entry: [
-    './src/webpack-public-path',
-    'webpack-hot-middleware/client?reload=true',
-    './src/index'
-  ],
-  target: 'web',
-  output: {
-    path: `${__dirname}/src`,
-    publicPath: '/',
-    filename: 'bundle.js'
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development'),
-      __DEV__: true
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'src/index.ejs',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      },
-      inject: true
-    })
-  ],
-  module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
-      {test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
-      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url?limit=10000&mimetype=application/font-woff"},
-      {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream'},
-      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml'},
-      {test: /\.(jpe?g|png|gif)$/i, loader: 'file?name=[name].[ext]'},
-      {test: /\.ico$/, loader: 'file?name=[name].[ext]'},
-      {test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'postcss', 'sass?sourceMap']}
+    entry: [
+        "react-hot-loader/patch",
+        "webpack/hot/only-dev-server",
+        "babel-polyfill",
+        "whatwg-fetch",
+        "./src/index"
+    ],
+    output: {
+        path: path.join(__dirname, "dist"),
+        publicPath: "/",
+        filename: "app.[hash].js"
+    },
+    devtool: "eval",
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader",
+                options: {
+                    presets: [
+                        ["es2015", {"modules": false}],
+                        "stage-0",
+                        "react"
+                    ],
+                    plugins: [
+                        "transform-async-to-generator",
+                        "transform-decorators-legacy"
+                    ]
+                }
+            },
+            {
+                test: /\.scss|css$/,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "postcss-loader",
+                    "resolve-url-loader",
+                    "sass-loader?sourceMap"
+                ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    "file-loader?hash=sha512&digest=hex&name=[hash].[ext]",
+                    {
+                        loader: "image-webpack-loader",
+                        options: {
+                            progressive: true,
+                            optimizationLevel: 7,
+                            interlaced: false,
+                            pngquant: {
+                                quality: "65-90",
+                                speed: 4
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: "url-loader?limit=10000&mimetype=application/font-woff"
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                use: "file-loader"
+            },
+            { 
+            test: /\.ico$/, 
+                loaders: [
+                    "file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]",
+                    "image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false"
+                ] 
+            }
+        ]
+    },
+    plugins: [
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new HtmlWebpackPlugin({ hash: false, template: "./src/index.hbs" }),
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /nb/)
     ]
-  },
-  postcss: ()=> [autoprefixer]
 };

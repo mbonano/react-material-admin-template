@@ -3,7 +3,7 @@
 
 import browserSync from 'browser-sync';
 import historyApiFallback from 'connect-history-api-fallback';
-import {chalkProcessing} from './chalkConfig';
+import {chalkProcessing} from './chalk-config';
 
 /* eslint-disable no-console */
 
